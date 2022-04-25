@@ -45,6 +45,22 @@ public class Main extends Application {
 		}
 	}
 
+	public static void changeToListAuthorsScene() {
+		try {
+			Parent root = FXMLLoader.load(Main.class.getResource("../javafx/listauthors.fxml"));
+			Scene scene = new Scene(root);
+
+			scene.getStylesheets().add("/resources/list-authors.css");
+
+			primaryStage.setTitle("Sistema de Biblioteca - Listagem dos Autores");
+			primaryStage.setScene(scene);
+			primaryStage.show();
+			primaryStage.setResizable(false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void changeToNewBookScene() {
 		try {
 			Parent root = FXMLLoader.load(Main.class.getResource("../javafx/newbook.fxml"));

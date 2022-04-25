@@ -31,7 +31,7 @@ public class MainController {
 	
 	@FXML
 	void handleListAuthors(ActionEvent event) {
-		
+		Main.changeToListAuthorsScene();	
 	}
 	
 	@FXML

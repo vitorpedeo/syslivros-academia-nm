@@ -3,7 +3,6 @@ package controller;
 import java.time.Year;
 import java.time.ZoneId;
 
-import dao.AuthorDao;
 import domain.Author;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,10 +11,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import main.Main;
+import service.AuthorService;
 
 public class AddAuthorController {
   private static Integer CURRENT_YEAR = Year.now(ZoneId.of("America/Sao_Paulo")).getValue();
-  private AuthorDao authorDao = new AuthorDao();
+  private AuthorService authorService = new AuthorService();
 
   private Alert infoAlert = new Alert(AlertType.INFORMATION);
   private Alert errorAlert = new Alert(AlertType.ERROR);
@@ -74,7 +74,7 @@ public class AddAuthorController {
     }
 
     Author author = new Author(authorName, authorNationality, Long.parseLong(authorBirthYear));
-    authorDao.insert(author);
+    authorService.insert(author);
 
     showInfoAlert("Cadastrar Autor", "Sucesso", 
     "Autor cadastrado com sucesso!");
