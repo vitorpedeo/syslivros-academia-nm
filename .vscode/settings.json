@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/home/vitor/www/java/javafx-sdk-18/lib/**/*.jar",
+        "/home/vitor/www/java/jdbc/ojdbc11.jar"
+    ]
+}
