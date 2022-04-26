@@ -160,9 +160,9 @@ public class AuthorDao {
     ) {
       prepareParameters(statement, updatedAuthor);
 
-      Integer numLinhas = statement.executeUpdate();
+      Integer lines = statement.executeUpdate();
 
-      System.out.println(numLinhas);
+      System.out.println(lines);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -177,9 +177,9 @@ public class AuthorDao {
     ) {
       statement.setLong(1, id);
 
-      Integer numLinhas = statement.executeUpdate();
+      Integer lines = statement.executeUpdate();
 
-      System.out.println(numLinhas);
+      System.out.println(lines);
     } catch (SQLException e) {
       e.printStackTrace();
     }

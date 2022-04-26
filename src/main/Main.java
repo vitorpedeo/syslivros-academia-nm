@@ -87,7 +87,25 @@ public class Main extends Application {
 			Parent root = FXMLLoader.load(Main.class.getResource("../javafx/newbook.fxml"));
 			Scene scene = new Scene(root);
 
+			scene.getStylesheets().add("/resources/new-book.css");
+
 			primaryStage.setTitle("Sistema de Biblioteca - Cadastrar Livro");
+			primaryStage.setScene(scene);
+			primaryStage.show();
+			primaryStage.setResizable(false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void changeToListBooksScene() {
+		try {
+			Parent root = FXMLLoader.load(Main.class.getResource("../javafx/listbooks.fxml"));
+			Scene scene = new Scene(root);
+
+			scene.getStylesheets().add("/resources/list-books.css");
+
+			primaryStage.setTitle("Sistema de Biblioteca - Listagem de Livros");
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			primaryStage.setResizable(false);
@@ -106,6 +124,8 @@ public class Main extends Application {
 			editBookController.getBookData(bookId);
 			
 			Scene scene = new Scene(root);
+
+			scene.getStylesheets().add("/resources/edit-book.css");
 			
 			primaryStage.setTitle("Sistema de Biblioteca - Editar Livro");
 			primaryStage.setScene(scene);

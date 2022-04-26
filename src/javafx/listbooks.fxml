@@ -7,33 +7,43 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="502.0" prefWidth="754.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ListBooksController">
    <center>
-      <Pane prefHeight="400.0" prefWidth="651.0" BorderPane.alignment="CENTER">
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="513.0" prefWidth="768.0" style="-fx-background-color: #1a202c;" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="searchTextField" layoutX="68.0" layoutY="53.0" prefHeight="30.0" prefWidth="351.0" promptText="Buscar por título">
+            <TextField fx:id="searchTextField" layoutX="114.0" layoutY="33.0" prefHeight="38.0" prefWidth="395.0" promptText="Buscar por título" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;">
                <font>
-                  <Font size="14.0" />
+                  <Font name="JetBrains Mono Regular" size="18.0" />
                </font></TextField>
-            <Button fx:id="searchButton" layoutX="441.0" layoutY="53.0" mnemonicParsing="false" onAction="#handleSearch" prefHeight="30.0" prefWidth="91.0" text="Buscar">
+            <Button fx:id="searchButton" layoutX="537.0" layoutY="33.0" mnemonicParsing="false" onAction="#handleSearch" prefHeight="38.0" prefWidth="117.0" style="-fx-background-color: #ffffff14;" text="Buscar" textFill="#edeeee">
                <font>
-                  <Font size="14.0" />
+                  <Font name="JetBrains Mono ExtraBold" size="18.0" />
                </font>
             </Button>
-            <ListView fx:id="booksListView" layoutX="68.0" layoutY="100.0" onMouseClicked="#handleBookSelect" prefHeight="215.0" prefWidth="464.0" />
-            <Button fx:id="newBookButton" layoutX="67.0" layoutY="329.0" mnemonicParsing="false" onAction="#handleNewBook" prefHeight="30.0" prefWidth="217.0" text="Cadastrar livro">
+            <ListView fx:id="booksListView" layoutX="114.0" layoutY="83.0" onMouseClicked="#handleBookSelect" prefHeight="215.0" prefWidth="540.0" style="-fx-background-color: #ffffff0a;" />
+            <Button fx:id="newBookButton" layoutX="114.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleNewBook" prefHeight="30.0" prefWidth="217.0" style="-fx-background-color: #ffffff14;" text="Cadastrar livro" textFill="#edeeee">
                <font>
-                  <Font size="14.0" />
+                  <Font name="JetBrains Mono ExtraBold" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="editBookButton" disable="true" layoutX="392.0" layoutY="329.0" mnemonicParsing="false" onAction="#handleEditBook" text="Editar">
+            <Button fx:id="editBookButton" disable="true" layoutX="409.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleEditBook" prefHeight="38.0" prefWidth="110.0" style="-fx-background-color: #ffffff14;" text="Editar" textFill="#edeeee">
                <font>
-                  <Font size="14.0" />
+                  <Font name="JetBrains Mono ExtraBold" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="deleteBookButton" disable="true" layoutX="468.0" layoutY="329.0" mnemonicParsing="false" onAction="#handleDeleteBook" text="Deletar">
+            <Button fx:id="deleteBookButton" disable="true" layoutX="539.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleDeleteBook" prefHeight="38.0" prefWidth="115.0" style="-fx-background-color: #ffffff14;" text="Deletar" textFill="#edeeee">
                <font>
-                  <Font size="14.0" />
+                  <Font name="JetBrains Mono ExtraBold" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="goBackButton" layoutX="275.0" layoutY="439.0" mnemonicParsing="false" onAction="#handleGoBack" prefHeight="30.0" prefWidth="217.0" style="-fx-background-color: #ffffff14;" text="Voltar" textFill="#edeeee">
+               <font>
+                  <Font name="JetBrains Mono ExtraBold" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="loadMoreButton" layoutX="114.0" layoutY="309.0" mnemonicParsing="false" onAction="#handleLoadMore" prefHeight="38.0" prefWidth="540.0" style="-fx-background-color: #ffffff14;" text="Carregar mais..." textFill="#edeeee">
+               <font>
+                  <Font name="JetBrains Mono ExtraBold" size="18.0" />
                </font>
             </Button>
          </children>

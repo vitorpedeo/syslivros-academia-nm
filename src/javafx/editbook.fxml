@@ -8,76 +8,56 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditBookController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditBookController">
    <center>
-      <Pane prefHeight="469.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #1a202c;" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="230.0" layoutY="33.0" text="Título">
+            <Label layoutX="66.0" layoutY="60.0" text="Título" textFill="#edeeee">
                <font>
-                  <Font size="14.0" />
+                  <Font name="JetBrains Mono Regular" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="titleTextField" layoutX="289.0" layoutY="33.0" prefHeight="30.0" prefWidth="274.0">
+            <TextField fx:id="titleTextInput" layoutX="176.0" layoutY="52.0" prefHeight="40.0" prefWidth="360.0" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;">
                <font>
-                  <Font size="14.0" />
+                  <Font size="18.0" />
                </font>
             </TextField>
-            <Label layoutX="30.0" layoutY="88.0" text="Descrição">
+            <Label layoutX="93.0" layoutY="226.0" text="ISBN" textFill="#edeeee">
                <font>
-                  <Font size="14.0" />
+                  <Font name="JetBrains Mono Regular" size="18.0" />
                </font>
             </Label>
-            <TextArea fx:id="descriptionTextField" layoutX="117.0" layoutY="88.0" prefHeight="158.0" prefWidth="447.0" />
-            <Label layoutX="60.0" layoutY="275.0" text="ISBN">
+            <TextField fx:id="isbnTextInput" layoutX="175.0" layoutY="220.0" prefHeight="40.0" prefWidth="125.0" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;">
                <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <TextField fx:id="isbnTextField" layoutX="117.0" layoutY="270.0" prefHeight="30.0" prefWidth="212.0">
-               <font>
-                  <Font size="14.0" />
+                  <Font size="18.0" />
                </font>
             </TextField>
-            <Label layoutX="359.0" layoutY="275.0" text="Edição">
+            <Label layoutX="332.0" layoutY="228.0" text="Edição" textFill="#edeeee">
                <font>
-                  <Font size="14.0" />
+                  <Font name="JetBrains Mono Regular" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="editionTextField" layoutX="416.0" layoutY="270.0" prefHeight="30.0" prefWidth="149.0">
+            <TextField fx:id="editionTextInput" layoutX="426.0" layoutY="220.0" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;">
                <font>
-                  <Font size="14.0" />
+                  <Font size="18.0" />
                </font>
             </TextField>
-            <Label layoutX="55.0" layoutY="324.0" text="Autor">
+            <Button fx:id="editBookButton" layoutX="325.0" layoutY="302.0" mnemonicParsing="false" onAction="#handleEditBook" prefHeight="38.0" prefWidth="184.0" style="-fx-background-color: #ffffff14;" text="Editar livro" textFill="#edeeee">
                <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <TextField fx:id="authorTextField" layoutX="117.0" layoutY="324.0" prefHeight="25.0" prefWidth="446.0">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <Button fx:id="editBookButton" layoutX="323.0" layoutY="379.0" mnemonicParsing="false" onAction="#handleEditBook" prefHeight="30.0" prefWidth="240.0" text="Editar livro">
-               <font>
-                  <Font size="14.0" />
+                  <Font name="JetBrains Mono ExtraBold" size="18.0" />
                </font>
             </Button>
-            <TextField fx:id="idTextField" disable="true" layoutX="117.0" layoutY="33.0" prefHeight="30.0" prefWidth="89.0">
+            <Button fx:id="goBackButton" layoutX="94.0" layoutY="302.0" mnemonicParsing="false" onAction="#handleGoBack" style="-fx-background-color: #ffffff14;" text="Voltar" textFill="#edeeee">
                <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <Label layoutX="75.0" layoutY="33.0" text="Id">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Button fx:id="goBackButton" layoutX="117.0" layoutY="379.0" mnemonicParsing="false" onAction="#handleGoBack" prefHeight="30.0" prefWidth="103.0" text="Voltar">
-               <font>
-                  <Font size="14.0" />
+                  <Font name="JetBrains Mono ExtraBold" size="18.0" />
                </font>
             </Button>
+            <TextArea fx:id="descriptionTitleInput" layoutX="177.0" layoutY="113.0" prefHeight="81.0" prefWidth="360.0" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;" />
+            <Label layoutX="63.0" layoutY="113.0" text="Descrição" textFill="#edeeee">
+               <font>
+                  <Font name="JetBrains Mono Regular" size="18.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
    </center>

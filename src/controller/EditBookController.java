@@ -1,83 +1,113 @@
 package controller;
 
-import dao.LivroDao;
-import domain.Livro;
+import domain.Book;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import main.Main;
+import service.BookService;
 
 public class EditBookController {
+  private Book editingBook = new Book();
 
-    @FXML
-    private TextField authorTextField;
+  private BookService bookService = new BookService();
 
-    @FXML
-    private TextArea descriptionTextField;
+  private Alert infoAlert = new Alert(AlertType.INFORMATION);
+  private Alert errorAlert = new Alert(AlertType.ERROR);
+  
+  @FXML
+  private TextArea descriptionTitleInput;
 
-    @FXML
-    private Button editBookButton;
+  @FXML
+  private Button editBookButton;
 
-    @FXML
-    private TextField editionTextField;
+  @FXML
+  private TextField editionTextInput;
 
-    @FXML
-    private Button goBackButton;
+  @FXML
+  private Button goBackButton;
 
-    @FXML
-    private TextField idTextField;
+  @FXML
+  private TextField isbnTextInput;
 
-    @FXML
-    private TextField isbnTextField;
+  @FXML
+  private TextField titleTextInput;
+    
+  public void getBookData(Long bookId) {
+    editingBook = bookService.getById(bookId);
 
-    @FXML
-    private TextField titleTextField;
+    titleTextInput.setText(editingBook.getTitle());
+    descriptionTitleInput.setText(editingBook.getDescription());
+    isbnTextInput.setText(editingBook.getIsbn());
+    editionTextInput.setText(editingBook.getEdition().toString());
+  }
 
-    @FXML
-    void handleEditBook(ActionEvent event) {
-      Livro livro = new Livro();
+  @FXML
+  void handleEditBook(ActionEvent event) {
+    String bookTitle = titleTextInput.getText();
+    String bookDescription = descriptionTitleInput.getText();
+    String bookIsbn = isbnTextInput.getText();
+    String bookEdition = editionTextInput.getText();
 
-      livro.setId(Long.parseLong(idTextField.getText()));
-      livro.setTitulo(titleTextField.getText());
-      livro.setDescricao(descriptionTextField.getText());
-      livro.setIsbn(isbnTextField.getText());
-      livro.setEdicao(Integer.parseInt(editionTextField.getText()));
-      livro.setAutor(authorTextField.getText());
-
-      LivroDao livroDao = new LivroDao();
-
-      try {
-          livroDao.update(livro);
-      } catch (Exception e) {
-          e.printStackTrace();
-      } 
+    if (bookTitle == "" || bookDescription == "" || bookIsbn == "" || bookEdition == "") {
+      showErrorAlert("Editar Livro", "Erro de Validação", 
+            "Preencha todos os campos antes de prosseguir!");
+     
+      return;
     }
 
-    public void getBookData(Long bookId) {
-      LivroDao livroDao = new LivroDao();
+    String onlyNumbersRegex = "[0-9]+";
+    Boolean editionHasOnlyNumbers = bookEdition.matches(onlyNumbersRegex);
 
-      try {
-        Livro livro = livroDao.getById(bookId);
-
-        idTextField.setText(livro.getId().toString());
-        titleTextField.setText(livro.getTitulo());
-        descriptionTextField.setText(livro.getDescricao());
-        isbnTextField.setText(livro.getIsbn());
-        editionTextField.setText(livro.getEdicao().toString());
-        authorTextField.setText(livro.getAutor());
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+    if (!editionHasOnlyNumbers) {
+      showErrorAlert("Editar Livro", "Erro de Validação", 
+            "A edição deve conter apenas números!");
+     
+      return;
     }
 
-    @FXML
-    void handleGoBack(ActionEvent event) {
-      try {
-        Main.changeToMainScene();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+    Boolean editionIsNotNegative = Integer.parseInt(bookEdition) > 0;
+
+    if (!editionIsNotNegative) {
+      showErrorAlert("Editar Livro", "Erro de Validação", 
+            "A edição não pode ser negativa!");
+     
+      return;
     }
+
+    editingBook.setTitle(bookTitle);
+    editingBook.setDescription(bookDescription);
+    editingBook.setIsbn(bookIsbn);
+    editingBook.setEdition(Integer.parseInt(bookEdition));
+
+    bookService.update(editingBook);
+
+    showInfoAlert("Editar Livro", "Sucesso", 
+    "Livro editado com sucesso!");
+
+    Main.changeToListBooksScene();
+  }
+  
+  @FXML
+  void handleGoBack(ActionEvent event) {
+    Main.changeToListBooksScene();
+  }
+
+  private void showErrorAlert(String title, String headerText, String message) {
+    errorAlert.setTitle(title);
+    errorAlert.setHeaderText(headerText);
+    errorAlert.setContentText(message);
+    errorAlert.showAndWait();
+  }
+
+  private void showInfoAlert(String title, String headerText, String message) {
+    infoAlert.setTitle(title);
+    infoAlert.setHeaderText(headerText);
+    infoAlert.setContentText(message);
+    infoAlert.showAndWait();
+  }
 }

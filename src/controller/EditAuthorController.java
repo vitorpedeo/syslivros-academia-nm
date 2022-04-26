@@ -15,13 +15,13 @@ import service.AuthorService;
 
 public class EditAuthorController {
   private static Integer CURRENT_YEAR = Year.now(ZoneId.of("America/Sao_Paulo")).getValue();
+
   private AuthorService authorService = new AuthorService();
   
   private Author editingAuthor = new Author();
 
   private Alert infoAlert = new Alert(AlertType.INFORMATION);
   private Alert errorAlert = new Alert(AlertType.ERROR);
-  
   
   @FXML
   private TextField birthYearTextInput;

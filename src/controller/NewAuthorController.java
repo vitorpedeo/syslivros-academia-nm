@@ -13,7 +13,7 @@ import javafx.scene.control.Alert.AlertType;
 import main.Main;
 import service.AuthorService;
 
-public class AddAuthorController {
+public class NewAuthorController {
   private static Integer CURRENT_YEAR = Year.now(ZoneId.of("America/Sao_Paulo")).getValue();
   private AuthorService authorService = new AuthorService();
 

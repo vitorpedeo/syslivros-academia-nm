@@ -26,7 +26,7 @@ public class MainController {
 	
 	@FXML
 	void handleAddBook(ActionEvent event) {
-		
+		Main.changeToNewBookScene();
 	}
 	
 	@FXML
@@ -36,7 +36,7 @@ public class MainController {
 	
 	@FXML
 	void handleListBooks(ActionEvent event) {
-		
+		Main.changeToListBooksScene();
 	}
 	
 }

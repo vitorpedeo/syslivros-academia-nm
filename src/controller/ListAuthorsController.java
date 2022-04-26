@@ -153,5 +153,4 @@ public class ListAuthorsController {
 				loadAuthors("name", searchTerm);
 			}
     }
-
 }

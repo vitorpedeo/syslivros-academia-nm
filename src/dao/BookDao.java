@@ -9,13 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import config.ConfigDB;
-import domain.Livro;
+import domain.Book;
 
-public class LivroDao {
-  public void insert(Livro livro) throws SQLException {
+public class BookDao {
+  private Integer booksPerPage = 5;
+
+  public void insert(Book livro) {
     String sql = """
-                    INSERT INTO livro(titulo, autor, isbn, descricao, edicao) 
-                    VALUES(?, ?, ?, ?, ?)""";
+                    INSERT INTO livro(titulo, isbn, edicao, descricao) 
+                    VALUES(?, ?, ?, ?)""";
     String idSql = """
                       SELECT livros_sequence.currval from dual
                       """;
@@ -42,17 +44,18 @@ public class LivroDao {
     }
   }
 
-  public List<Livro> getAll() throws SQLException {
-    String sql = "SELECT id, titulo, isbn, edicao, autor, descricao FROM livro";
-    List<Livro> livros = null;
+  public List<Book> getAll() {
+    String sql = """
+      SELECT id, titulo, isbn, edicao, descricao FROM livro FETCH FIRST 5 ROWS ONLY""";
+    List<Book> livros = null;
 
     try(
       Connection connection = ConfigDB.getConnection();
       Statement statement = connection.createStatement();
     ) {
       ResultSet results = statement.executeQuery(sql);
-      livros = new ArrayList<Livro>();
-      Livro livro;
+      livros = new ArrayList<Book>();
+      Book livro;
 
       while (results.next()) {
         livro = fillBook(results);
@@ -66,9 +69,38 @@ public class LivroDao {
     return livros;
   }
 
-  public Livro getById(Long id) throws SQLException {
-    String sql = "SELECT id, titulo, isbn, edicao, autor, descricao FROM livro where id = ?";
-    Livro livro = null;
+  public List<Book> getAllPaginated() {
+    this.booksPerPage += 5;
+
+    String sql = """
+                 SELECT id, titulo, isbn, edicao, descricao FROM livro FETCH FIRST ? ROWS ONLY""";
+    List<Book> books = null;
+
+    try(
+      Connection connection = ConfigDB.getConnection();
+      PreparedStatement statement = connection.prepareStatement(sql);
+    ) {
+      statement.setInt(1, booksPerPage);
+
+      ResultSet results = statement.executeQuery();
+      books = new ArrayList<Book>();
+      Book book;
+
+      while (results.next()) {
+        book = fillBook(results);
+      
+        books.add(book);        
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return books;
+  }
+
+  public Book getById(Long id) {
+    String sql = "SELECT id, titulo, isbn, edicao, descricao FROM livro where id = ?";
+    Book livro = null;
 
     try(
       Connection connection = ConfigDB.getConnection();
@@ -88,19 +120,20 @@ public class LivroDao {
     return livro;
   }
 
-  public List<Livro> getByTitle(String title) throws SQLException {
-    String sql = "SELECT id, titulo, isbn, edicao, autor, descricao FROM livro where titulo like ?";
-    List<Livro> livros = null;
+  public List<Book> getByTitle(String title) {
+    String sql = "SELECT id, titulo, isbn, edicao, descricao FROM livro where lower(titulo) like ?";
+    List<Book> livros = null;
 
     try(
       Connection connection = ConfigDB.getConnection();
       PreparedStatement statement = connection.prepareStatement(sql);
     ) {
-      statement.setString(1, "%" + title + "%");
+      String lowerCasedTitle = title.toLowerCase();
+      statement.setString(1, "%" + lowerCasedTitle + "%");
 
       ResultSet results = statement.executeQuery();
-      livros = new ArrayList<Livro>();
-      Livro livro;
+      livros = new ArrayList<Book>();
+      Book livro;
 
       while (results.next()) {
         livro = fillBook(results);
@@ -114,13 +147,12 @@ public class LivroDao {
     return livros;
   }
 
-  public void update(Livro livroAtualizado) throws SQLException {
+  public void update(Book updatedBook) {
     String sql = """
                     UPDATE livro SET titulo = ?,
-                                     autor = ?,
                                      isbn = ?,
-                                     descricao = ?,
-                                     edicao = ?
+                                     edicao = ?,
+                                     descricao = ?
                     WHERE id = ? 
                     """;
 
@@ -128,17 +160,17 @@ public class LivroDao {
       Connection connection = ConfigDB.getConnection();
       PreparedStatement statement = connection.prepareStatement(sql);
     ) {
-      prepareParameters(statement, livroAtualizado);
+      prepareParameters(statement, updatedBook);
 
-      Integer numLinhas = statement.executeUpdate();
+      Integer lines = statement.executeUpdate();
 
-      System.out.println(numLinhas);
+      System.out.println(lines);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
-  public void delete(Long id) throws SQLException {
+  public void delete(Long id) {
     String sql = "DELETE FROM livro where id = ?";
 
     try(
@@ -147,35 +179,33 @@ public class LivroDao {
     ) {
       statement.setLong(1, id);
 
-      Integer numLinhas = statement.executeUpdate();
+      Integer lines = statement.executeUpdate();
 
-      System.out.println(numLinhas);
+      System.out.println(lines);
     } catch (SQLException e) {
       e.printStackTrace();
     }
   }
 
-  private void prepareParameters(PreparedStatement stm, Livro livro) throws SQLException {
-    stm.setString(1, livro.getTitulo());
-    stm.setString(2, livro.getAutor());
-    stm.setString(3, livro.getIsbn());
-    stm.setString(4, livro.getDescricao());
-    stm.setInt(5, livro.getEdicao());
+  private void prepareParameters(PreparedStatement stm, Book livro) throws SQLException {
+    stm.setString(1, livro.getTitle());
+    stm.setString(2, livro.getIsbn());
+    stm.setInt(3, livro.getEdition());
+    stm.setString(4, livro.getDescription());
 
     if (livro.getId() != null) {
-      stm.setLong(6, livro.getId());
+      stm.setLong(5, livro.getId());
     }
   }
 
-  private Livro fillBook(ResultSet resultSet) throws SQLException {
-    Livro livro = new Livro();
+  private Book fillBook(ResultSet resultSet) throws SQLException {
+    Book livro = new Book();
     
     livro.setId(resultSet.getLong("id"));
-    livro.setTitulo(resultSet.getString("titulo"));
+    livro.setTitle(resultSet.getString("titulo"));
     livro.setIsbn(resultSet.getString("isbn"));
-    livro.setEdicao(resultSet.getInt("edicao"));
-    livro.setAutor(resultSet.getString("autor"));
-    livro.setDescricao(resultSet.getString("descricao"));
+    livro.setEdition(resultSet.getInt("edicao"));
+    livro.setDescription(resultSet.getString("descricao"));
 
     return livro;
   }
