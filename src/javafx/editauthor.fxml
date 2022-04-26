@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditAuthorController">
+   <center>
+      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #1a202c;" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="94.0" layoutY="62.0" text="Nome" textFill="#edeeee">
+               <font>
+                  <Font name="JetBrains Mono Regular" size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="nameTextInput" layoutX="94.0" layoutY="99.0" prefHeight="40.0" prefWidth="415.0" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <Label layoutX="94.0" layoutY="168.0" text="Nacionalidade" textFill="#edeeee">
+               <font>
+                  <Font name="JetBrains Mono Regular" size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="nationalityTextInput" layoutX="94.0" layoutY="210.0" prefHeight="40.0" prefWidth="178.0" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <Label layoutX="301.0" layoutY="169.0" text="Ano de Nascimento" textFill="#edeeee">
+               <font>
+                  <Font name="JetBrains Mono Regular" size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="birthYearTextInput" layoutX="300.0" layoutY="211.0" prefHeight="40.0" prefWidth="210.0" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <Button fx:id="editAuthorButton" layoutX="325.0" layoutY="289.0" mnemonicParsing="false" onAction="#handleEditAuthor" prefHeight="38.0" prefWidth="184.0" style="-fx-background-color: #ffffff14;" text="Editar autor" textFill="#edeeee">
+               <font>
+                  <Font name="JetBrains Mono ExtraBold" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="goBackButton" layoutX="94.0" layoutY="289.0" mnemonicParsing="false" onAction="#handleGoBack" style="-fx-background-color: #ffffff14;" text="Voltar" textFill="#edeeee">
+               <font>
+                  <Font name="JetBrains Mono ExtraBold" size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+   </center>
+</BorderPane>

@@ -13,41 +13,47 @@ import javafx.scene.control.Alert.AlertType;
 import main.Main;
 import service.AuthorService;
 
-public class AddAuthorController {
+public class EditAuthorController {
   private static Integer CURRENT_YEAR = Year.now(ZoneId.of("America/Sao_Paulo")).getValue();
   private AuthorService authorService = new AuthorService();
+  
+  private Author editingAuthor = new Author();
 
   private Alert infoAlert = new Alert(AlertType.INFORMATION);
   private Alert errorAlert = new Alert(AlertType.ERROR);
-
-  @FXML
-  private Button addAuthorButton;
-
+  
+  
   @FXML
   private TextField birthYearTextInput;
-
+  
+  @FXML
+  private Button editAuthorButton;
+  
   @FXML
   private Button goBackButton;
-
+  
   @FXML
   private TextField nameTextInput;
-
+  
   @FXML
   private TextField nationalityTextInput;
+  
+  public void getAuthorData(Long authorId) {
+    editingAuthor = authorService.getById(authorId);
 
-  @FXML
-  public void handleGoBack(ActionEvent event) {
-    Main.changeToMainScene();
+    nameTextInput.setText(editingAuthor.getName());
+    nationalityTextInput.setText(editingAuthor.getNationality());
+    birthYearTextInput.setText(editingAuthor.getBirthYear().toString());
   }
 
   @FXML
-  public void handleAddNewAuthor(ActionEvent event) {
+  public void handleEditAuthor(ActionEvent event) {
     String authorName = nameTextInput.getText();
     String authorNationality = nationalityTextInput.getText();
     String authorBirthYear = birthYearTextInput.getText();
 
     if (authorName == "" || authorNationality == "" || authorBirthYear == "") {
-      showErrorAlert("Cadastrar Autor", "Erro de Validação", 
+      showErrorAlert("Editar Autor", "Erro de Validação", 
             "Preencha todos os campos antes de prosseguir!");
      
       return;
@@ -58,7 +64,7 @@ public class AddAuthorController {
     Boolean birthYearHasCorrectLength = authorBirthYear.length() == 4; 
 
     if (!birthYearHasOnlyNumbers || !birthYearHasCorrectLength) {
-      showErrorAlert("Cadastrar Autor", "Erro de Validação", 
+      showErrorAlert("Editar Autor", "Erro de Validação", 
             "Informe um ano válido!");
      
       return;
@@ -67,29 +73,37 @@ public class AddAuthorController {
     Boolean birthYearIsInRightInterval = Integer.parseInt(authorBirthYear) < CURRENT_YEAR;
 
     if (!birthYearIsInRightInterval) {
-      showErrorAlert("Cadastrar Autor", "Erro de Validação", 
+      showErrorAlert("Editar Autor", "Erro de Validação", 
             "O ano informado deve ser menor que o ano atual!");
      
       return;
     }
 
-    Author author = new Author(authorName, authorNationality, Long.parseLong(authorBirthYear));
-    authorService.insert(author);
+    editingAuthor.setName(authorName);
+    editingAuthor.setNationality(authorNationality);
+    editingAuthor.setBirthYear(Long.parseLong(authorBirthYear));
 
-    showInfoAlert("Cadastrar Autor", "Sucesso", 
-    "Autor cadastrado com sucesso!");
+    authorService.update(editingAuthor);
+
+    showInfoAlert("Editar Autor", "Sucesso", 
+    "Autor editado com sucesso!");
 
     Main.changeToListAuthorsScene();
   }
+  
+  @FXML
+  public void handleGoBack(ActionEvent event) {
+    Main.changeToListAuthorsScene();
+  }
 
-  public void showErrorAlert(String title, String headerText, String message) {
+  private void showErrorAlert(String title, String headerText, String message) {
     errorAlert.setTitle(title);
     errorAlert.setHeaderText(headerText);
     errorAlert.setContentText(message);
     errorAlert.showAndWait();
   }
 
-  public void showInfoAlert(String title, String headerText, String message) {
+  private void showInfoAlert(String title, String headerText, String message) {
     infoAlert.setTitle(title);
     infoAlert.setHeaderText(headerText);
     infoAlert.setContentText(message);
