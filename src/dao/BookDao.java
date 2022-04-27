@@ -9,12 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import config.ConfigDB;
+import domain.Author;
+import domain.AuthorBook;
 import domain.Book;
 
 public class BookDao {
   private Integer booksPerPage = 5;
 
-  public void insert(Book livro) {
+  public void insert(Book book) {
     String sql = """
                     INSERT INTO livro(titulo, isbn, edicao, descricao) 
                     VALUES(?, ?, ?, ?)""";
@@ -23,22 +25,34 @@ public class BookDao {
                       """;
 
     try(
-      // 1 - Abrir conexão
       Connection connection = ConfigDB.getConnection();
-      // 2 - Abrir sessão
       PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
       PreparedStatement idStatement = connection.prepareStatement(idSql);
     ) {
-      prepareParameters(statement, livro);
-      
+      connection.setAutoCommit(false);
+
+      prepareParameters(statement, book);
+
       statement.executeUpdate();
 
       ResultSet resultSet = idStatement.executeQuery();
       
       if (resultSet.next()) {
-        livro.setId(resultSet.getLong(1));
+        book.setId(resultSet.getLong(1));
       }
-      // Desconecta do banco de dados automaticamente
+
+      AuthorBookDao authorBookDao = new AuthorBookDao(connection);
+      List<AuthorBook> authorBooks = new ArrayList<AuthorBook>();
+      AuthorBook authorBook;
+
+      for (Author a : book.getAuthors()) {
+        authorBook = new AuthorBook(a.getId(), book.getId());
+        authorBooks.add(authorBook);
+      }
+
+      authorBookDao.insert(authorBooks);
+
+      connection.commit();
     } catch (Exception e) {
       e.printStackTrace();
     }

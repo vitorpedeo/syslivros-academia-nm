@@ -16,8 +16,8 @@ public class AuthorService {
     return authorDao.getAll();
   }
 
-  public List<Author> getAllPaginated() {
-    return authorDao.getAllPaginated();
+  public List<Author> getAll(Integer offset) {
+    return authorDao.getAll(offset);
   }
 
   public List<Author> getByName(String name) {

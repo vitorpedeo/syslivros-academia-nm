@@ -1,11 +1,14 @@
 package domain;
 
+import java.util.List;
+
 public class Book {
   private Long id;
   private String title;
   private String isbn;
   private Integer edition;
   private String description;
+  private List<Author> authors;
 
   public Book() {}
 
@@ -54,6 +57,14 @@ public class Book {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public List<Author> getAuthors() {
+    return authors;
+  }
+
+  public void setAuthors(List<Author> authors) {
+    this.authors = authors;
   }
 
   @Override

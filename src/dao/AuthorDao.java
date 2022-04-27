@@ -12,8 +12,6 @@ import config.ConfigDB;
 import domain.Author;
 
 public class AuthorDao {
-  private Integer authorsPerPage = 5;
-
   public void insert(Author author) {
     String sql = """
                     INSERT INTO autor(nome, nacionalidade, ano_nascimento) 
@@ -43,7 +41,8 @@ public class AuthorDao {
 
   public List<Author> getAll() {
     String sql = """
-                SELECT id, nome, nacionalidade, ano_nascimento FROM autor FETCH FIRST 5 ROWS ONLY""";
+                SELECT id, nome, nacionalidade, ano_nascimento FROM autor 
+                FETCH FIRST 5 ROWS ONLY""";
     List<Author> authors = null;
 
     try(
@@ -66,18 +65,17 @@ public class AuthorDao {
     return authors;
   }
 
-  public List<Author> getAllPaginated() {
-    this.authorsPerPage += 5;
-
+  public List<Author> getAll(Integer offset) {
     String sql = """
-                 SELECT id, nome, nacionalidade, ano_nascimento FROM autor FETCH FIRST ? ROWS ONLY""";
+                SELECT id, nome, nacionalidade, ano_nascimento FROM autor 
+                OFFSET ? ROWS FETCH FIRST 5 ROWS ONLY""";
     List<Author> authors = null;
 
     try(
       Connection connection = ConfigDB.getConnection();
       PreparedStatement statement = connection.prepareStatement(sql);
     ) {
-      statement.setInt(1, authorsPerPage);
+      statement.setInt(1, offset);
 
       ResultSet results = statement.executeQuery();
       authors = new ArrayList<Author>();
