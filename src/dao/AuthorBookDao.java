@@ -3,9 +3,9 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 
-import domain.AuthorBook;
+import domain.Author;
+import domain.Book;
 
 public class AuthorBookDao {
   Connection connection;
@@ -14,7 +14,7 @@ public class AuthorBookDao {
     this.connection = connection;
   }
 
-  public void insert(List<AuthorBook> authorBooks) throws SQLException {
+  public void insert(Book book) throws SQLException {
     String sql = """
         INSERT INTO autor_livro(id_autor, id_livro) VALUES(?, ?)
         """;
@@ -22,9 +22,9 @@ public class AuthorBookDao {
     try(
       PreparedStatement statement = connection.prepareStatement(sql);
     ) {
-      for (AuthorBook aB : authorBooks) {
-        statement.setLong(1, aB.getAuthorId());
-        statement.setLong(2, aB.getBookId());
+      for (Author a : book.getAuthors()) {
+        statement.setLong(1, a.getId());
+        statement.setLong(2, book.getId());
         statement.addBatch();
       }
 

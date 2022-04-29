@@ -45,7 +45,7 @@ public class ListAuthorsController {
   
   @FXML
   private TextField searchTextField;
-  
+   
   @FXML
   public void initialize() {
     loadAuthors("initial");

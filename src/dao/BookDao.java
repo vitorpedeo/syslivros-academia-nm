@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import config.ConfigDB;
-import domain.Author;
-import domain.AuthorBook;
 import domain.Book;
 
 public class BookDao {
@@ -26,7 +24,7 @@ public class BookDao {
 
     try(
       Connection connection = ConfigDB.getConnection();
-      PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+      PreparedStatement statement = connection.prepareStatement(sql);
       PreparedStatement idStatement = connection.prepareStatement(idSql);
     ) {
       connection.setAutoCommit(false);
@@ -42,15 +40,8 @@ public class BookDao {
       }
 
       AuthorBookDao authorBookDao = new AuthorBookDao(connection);
-      List<AuthorBook> authorBooks = new ArrayList<AuthorBook>();
-      AuthorBook authorBook;
 
-      for (Author a : book.getAuthors()) {
-        authorBook = new AuthorBook(a.getId(), book.getId());
-        authorBooks.add(authorBook);
-      }
-
-      authorBookDao.insert(authorBooks);
+      authorBookDao.insert(book);
 
       connection.commit();
     } catch (Exception e) {
@@ -83,27 +74,28 @@ public class BookDao {
     return livros;
   }
 
-  public List<Book> getAllPaginated() {
+  public List<Book> getAll(Integer offset) {
     this.booksPerPage += 5;
 
     String sql = """
-                 SELECT id, titulo, isbn, edicao, descricao FROM livro FETCH FIRST ? ROWS ONLY""";
+                SELECT id, titulo, isbn, edicao, descricao FROM livro 
+                OFFSET ? ROWS FETCH FIRST 5 ROWS ONLY""";
     List<Book> books = null;
 
     try(
       Connection connection = ConfigDB.getConnection();
       PreparedStatement statement = connection.prepareStatement(sql);
     ) {
-      statement.setInt(1, booksPerPage);
+      statement.setInt(1, offset);
 
       ResultSet results = statement.executeQuery();
       books = new ArrayList<Book>();
-      Book book;
+      Book author;
 
       while (results.next()) {
-        book = fillBook(results);
+        author = fillBook(results);
       
-        books.add(book);        
+        books.add(author);        
       }
     } catch (Exception e) {
       e.printStackTrace();

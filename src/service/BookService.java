@@ -16,8 +16,8 @@ public class BookService {
     return bookDao.getAll();
   }
 
-  public List<Book> getAllPaginated() {
-    return bookDao.getAllPaginated();
+  public List<Book> getAll(Integer offset) {
+    return bookDao.getAll(offset);
   }
 
   public List<Book> getByTitle(String title) {

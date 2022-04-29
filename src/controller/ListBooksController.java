@@ -20,6 +20,8 @@ import service.BookService;
 public class ListBooksController {
 		private BookService bookService = new BookService();
 
+    private Integer offset = 0;
+
     @FXML
     private ListView<Book> booksListView;
 
@@ -63,14 +65,13 @@ public class ListBooksController {
 		}
 
 		private void loadBooks(String type) {
-			booksListView.getItems().clear();
-
       List<Book> books = new ArrayList<Book>();
 
       if (type == "initial") {
         books = bookService.getAll();
       } else if (type == "more") {
-        books = bookService.getAllPaginated();
+        offset += 5;
+        books = bookService.getAll(offset);
       }
 
       for (Book b : books) {
@@ -79,8 +80,6 @@ public class ListBooksController {
 		}
 
 		private void loadBooks(String filterBy, String searchTerm) {
-			booksListView.getItems().clear();
-
 			List<Book> books = new ArrayList<Book>();
 
       if (filterBy == "title") {

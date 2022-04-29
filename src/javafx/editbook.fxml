@@ -2,62 +2,79 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditBookController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="600.0" prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditBookController">
    <center>
-      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #1a202c;" BorderPane.alignment="CENTER">
+      <Pane prefHeight="200.0" prefWidth="702.0" style="-fx-background-color: #1a202c;" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="66.0" layoutY="60.0" text="Título" textFill="#edeeee">
+            <Label layoutX="66.0" layoutY="38.0" text="Título" textFill="#edeeee">
                <font>
                   <Font name="JetBrains Mono Regular" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="titleTextInput" layoutX="176.0" layoutY="52.0" prefHeight="40.0" prefWidth="360.0" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;">
+            <TextField fx:id="titleTextInput" layoutX="176.0" layoutY="30.0" prefHeight="40.0" prefWidth="360.0" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;">
                <font>
                   <Font size="18.0" />
                </font>
             </TextField>
-            <Label layoutX="93.0" layoutY="226.0" text="ISBN" textFill="#edeeee">
+            <Label layoutX="93.0" layoutY="204.0" text="ISBN" textFill="#edeeee">
                <font>
                   <Font name="JetBrains Mono Regular" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="isbnTextInput" layoutX="175.0" layoutY="220.0" prefHeight="40.0" prefWidth="125.0" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;">
+            <TextField fx:id="isbnTextInput" layoutX="175.0" layoutY="198.0" prefHeight="40.0" prefWidth="125.0" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;">
                <font>
                   <Font size="18.0" />
                </font>
             </TextField>
-            <Label layoutX="332.0" layoutY="228.0" text="Edição" textFill="#edeeee">
+            <Label layoutX="332.0" layoutY="206.0" text="Edição" textFill="#edeeee">
                <font>
                   <Font name="JetBrains Mono Regular" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="editionTextInput" layoutX="426.0" layoutY="220.0" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;">
+            <TextField fx:id="editionTextInput" layoutX="426.0" layoutY="198.0" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;">
                <font>
                   <Font size="18.0" />
                </font>
             </TextField>
-            <Button fx:id="editBookButton" layoutX="325.0" layoutY="302.0" mnemonicParsing="false" onAction="#handleEditBook" prefHeight="38.0" prefWidth="184.0" style="-fx-background-color: #ffffff14;" text="Editar livro" textFill="#edeeee">
+            <Button fx:id="editBookButton" layoutX="299.0" layoutY="617.0" mnemonicParsing="false" onAction="#handleEditBook" prefHeight="38.0" prefWidth="236.0" style="-fx-background-color: #ffffff14;" text="Editar livro" textFill="#edeeee">
                <font>
                   <Font name="JetBrains Mono ExtraBold" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="goBackButton" layoutX="94.0" layoutY="302.0" mnemonicParsing="false" onAction="#handleGoBack" style="-fx-background-color: #ffffff14;" text="Voltar" textFill="#edeeee">
+            <Button fx:id="goBackButton" layoutX="66.0" layoutY="617.0" mnemonicParsing="false" onAction="#handleGoBack" prefHeight="38.0" prefWidth="144.0" style="-fx-background-color: #ffffff14;" text="Voltar" textFill="#edeeee">
                <font>
                   <Font name="JetBrains Mono ExtraBold" size="18.0" />
                </font>
             </Button>
-            <TextArea fx:id="descriptionTitleInput" layoutX="177.0" layoutY="113.0" prefHeight="81.0" prefWidth="360.0" style="-fx-background-color: #ffffff0a; -fx-text-fill: #edeeee;" />
-            <Label layoutX="63.0" layoutY="113.0" text="Descrição" textFill="#edeeee">
+            <TextArea fx:id="descriptionTitleInput" layoutX="177.0" layoutY="91.0" prefHeight="81.0" prefWidth="360.0" style="-fx-text-fill: #edeeee;" />
+            <Label layoutX="63.0" layoutY="91.0" text="Descrição" textFill="#edeeee">
                <font>
                   <Font name="JetBrains Mono Regular" size="18.0" />
                </font>
             </Label>
+            <Label layoutX="66.0" layoutY="266.0" text="Autores do Livro" textFill="#edeeee">
+               <font>
+                  <Font name="JetBrains Mono Regular" size="18.0" />
+               </font>
+            </Label>
+            <ListView fx:id="authorsListView" layoutX="64.0" layoutY="334.0" prefHeight="200.0" prefWidth="470.0" style="-fx-background-color: #ffffff0a;" />
+            <Label layoutX="66.0" layoutY="302.0" text="Selecione 1 ou mais autores" textFill="WHITE">
+               <font>
+                  <Font name="JetBrains Mono Regular" size="12.0" />
+               </font>
+            </Label>
+            <Button fx:id="loadMoreAuthorsButton" layoutX="64.0" layoutY="547.0" mnemonicParsing="false" onAction="#handleLoadMoreAuthors" prefHeight="38.0" prefWidth="470.0" style="-fx-background-color: #ffffff14;" text="Carregar mais..." textFill="#edeeee">
+               <font>
+                  <Font name="JetBrains Mono ExtraBold" size="18.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
    </center>
