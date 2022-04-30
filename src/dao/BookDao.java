@@ -168,9 +168,13 @@ public class BookDao {
     ) {
       prepareParameters(statement, updatedBook);
 
-      Integer lines = statement.executeUpdate();
+      statement.executeUpdate();
 
-      System.out.println(lines);
+      AuthorBookDao authorBookDao = new AuthorBookDao(connection);
+
+      authorBookDao.deleteAllByBookId(updatedBook.getId());
+
+      authorBookDao.insert(updatedBook);
     } catch (Exception e) {
       e.printStackTrace();
     }

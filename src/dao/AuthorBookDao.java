@@ -35,4 +35,20 @@ public class AuthorBookDao {
       throw e;
     }
   }
+
+  public void deleteAllByBookId(Long id) {
+    String sql = """
+        DELETE FROM autor_livro WHERE id_livro = ?
+        """;
+    
+    try(
+      PreparedStatement statement = connection.prepareStatement(sql);
+    ) {
+      statement.setLong(1, id);
+
+      statement.executeUpdate();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 }

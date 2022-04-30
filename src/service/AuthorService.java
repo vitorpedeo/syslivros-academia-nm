@@ -28,6 +28,10 @@ public class AuthorService {
     return authorDao.getById(id);
   }
 
+  public List<Author> getAllByBookId(Long bookId) {
+    return authorDao.getAllByBookId(bookId);
+  }
+
   public void update(Author author) {
     authorDao.update(author);
   }

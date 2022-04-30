@@ -11,10 +11,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
 import main.Main;
 import service.AuthorService;
 import service.BookService;
@@ -50,23 +50,31 @@ public class EditBookController {
 
   @FXML
 	private ListView<Author> authorsListView;
+  
+  @FXML
+	private ListView<Author> currentBookAuthorsListView;
 
   @FXML
   private TextField titleTextInput;
 
-  private List<Author> selectedAuthors = new ArrayList<Author>();
-  
   @FXML
 	public void initialize() {
 		loadAuthors();
 
-		authorsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		authorsListView.getSelectionModel().selectedItemProperty().addListener((obs,ov,nv)->{
-			selectedAuthors.clear();
-			selectedAuthors.addAll(authorsListView.getSelectionModel().getSelectedItems());
+		authorsListView.setCellFactory(param -> new ListCell<Author>() {
+			@Override
+			protected void updateItem(Author item, boolean empty) {
+					super.updateItem(item, empty);
+	
+					if (empty || item == null || item.getName() == null) {
+							setText(null);
+					} else {
+							setText(item.getName());
+					}
+			}
 		});
 
-		authorsListView.setCellFactory(param -> new ListCell<Author>() {
+		currentBookAuthorsListView.setCellFactory(param -> new ListCell<Author>() {
 			@Override
 			protected void updateItem(Author item, boolean empty) {
 					super.updateItem(item, empty);
@@ -92,13 +100,42 @@ public class EditBookController {
 
   public void getBookData(Long bookId) {
     editingBook = bookService.getById(bookId);
+    editingBook.setAuthors(authorService.getAllByBookId(bookId));
 
     titleTextInput.setText(editingBook.getTitle());
     descriptionTitleInput.setText(editingBook.getDescription());
     isbnTextInput.setText(editingBook.getIsbn());
     editionTextInput.setText(editingBook.getEdition().toString());
 
-    System.out.println(editingBook.getAuthors());
+    currentBookAuthorsListView.getItems().addAll(editingBook.getAuthors());
+  }
+
+  @FXML
+  public void handleAuthorSelect(MouseEvent event) {
+    Author selectedAuthor = authorsListView.getSelectionModel().getSelectedItem();
+    Boolean isAlreadyAnAuthor = false;
+
+    for (Author author : currentBookAuthorsListView.getItems()) {
+      if (selectedAuthor.getId() == author.getId()) {
+        isAlreadyAnAuthor = true;
+      }
+    }
+
+    if (isAlreadyAnAuthor) {
+      showErrorAlert("Editar Livro", "Erro de Validação", 
+            "O autor já foi selecionado!");
+     
+      return;
+    } else {
+      currentBookAuthorsListView.getItems().add(selectedAuthor);
+    }
+  }
+
+  @FXML
+  public void handleCurrentAuthorsSelect(MouseEvent event) {
+    int selectedAuthorIndex = currentBookAuthorsListView.getSelectionModel().getSelectedIndex();
+
+    currentBookAuthorsListView.getItems().remove(selectedAuthorIndex);
   }
 
   @FXML
@@ -134,10 +171,21 @@ public class EditBookController {
       return;
     }
 
+    List<Author> selectedAuthors = currentBookAuthorsListView.getItems();
+    Boolean isAuthorsEmpty = selectedAuthors.isEmpty();
+
+    if (isAuthorsEmpty) {
+      showErrorAlert("Editar Livro", "Erro de Validação", 
+			"Escolha ao menos 1 autor!");
+			
+			return;
+    }
+
     editingBook.setTitle(bookTitle);
     editingBook.setDescription(bookDescription);
     editingBook.setIsbn(bookIsbn);
     editingBook.setEdition(Integer.parseInt(bookEdition));
+    editingBook.setAuthors(selectedAuthors);
 
     bookService.update(editingBook);
 

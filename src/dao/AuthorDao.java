@@ -115,6 +115,36 @@ public class AuthorDao {
     return livro;
   }
 
+  public List<Author> getAllByBookId(Long bookId) {
+    String sql = """
+                    SELECT a.* FROM autor a
+                    INNER JOIN autor_livro al
+                    ON a.id = al.id_autor
+                    AND al.id_livro = ?""";
+    List<Author> authors = null;
+
+    try(
+      Connection connection = ConfigDB.getConnection();
+      PreparedStatement statement = connection.prepareStatement(sql);
+    ) {
+      statement.setLong(1, bookId);
+
+      ResultSet results = statement.executeQuery();
+      authors = new ArrayList<Author>();
+      Author author;
+
+      while (results.next()) {
+        author = fillAuthor(results);
+      
+        authors.add(author);        
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return authors;
+  }
+
   public List<Author> getByName(String name) {
     String sql = """
       SELECT id, nome, nacionalidade, ano_nascimento FROM autor where lower(nome) like ?
