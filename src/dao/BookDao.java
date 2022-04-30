@@ -16,16 +16,12 @@ public class BookDao {
 
   public void insert(Book book) {
     String sql = """
-                    INSERT INTO livro(titulo, isbn, edicao, descricao) 
+                    INSERT INTO book(title, isbn, edition, description) 
                     VALUES(?, ?, ?, ?)""";
-    String idSql = """
-                      SELECT livros_sequence.currval from dual
-                      """;
 
     try(
       Connection connection = ConfigDB.getConnection();
-      PreparedStatement statement = connection.prepareStatement(sql);
-      PreparedStatement idStatement = connection.prepareStatement(idSql);
+      PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
     ) {
       connection.setAutoCommit(false);
 
@@ -33,7 +29,7 @@ public class BookDao {
 
       statement.executeUpdate();
 
-      ResultSet resultSet = idStatement.executeQuery();
+      ResultSet resultSet = statement.getGeneratedKeys();
       
       if (resultSet.next()) {
         book.setId(resultSet.getLong(1));
@@ -51,34 +47,34 @@ public class BookDao {
 
   public List<Book> getAll() {
     String sql = """
-      SELECT id, titulo, isbn, edicao, descricao FROM livro FETCH FIRST 5 ROWS ONLY""";
-    List<Book> livros = null;
+      SELECT id, title, isbn, edition, description FROM book FETCH FIRST 5 ROWS ONLY""";
+    List<Book> books = null;
 
     try(
       Connection connection = ConfigDB.getConnection();
       Statement statement = connection.createStatement();
     ) {
       ResultSet results = statement.executeQuery(sql);
-      livros = new ArrayList<Book>();
-      Book livro;
+      books = new ArrayList<Book>();
+      Book book;
 
       while (results.next()) {
-        livro = fillBook(results);
+        book = fillBook(results);
       
-        livros.add(livro);        
+        books.add(book);        
       }
     } catch (SQLException e) {
       e.printStackTrace();
     }
 
-    return livros;
+    return books;
   }
 
   public List<Book> getAll(Integer offset) {
     this.booksPerPage += 5;
 
     String sql = """
-                SELECT id, titulo, isbn, edicao, descricao FROM livro 
+                SELECT id, title, isbn, edition, description FROM book 
                 OFFSET ? ROWS FETCH FIRST 5 ROWS ONLY""";
     List<Book> books = null;
 
@@ -105,8 +101,8 @@ public class BookDao {
   }
 
   public Book getById(Long id) {
-    String sql = "SELECT id, titulo, isbn, edicao, descricao FROM livro where id = ?";
-    Book livro = null;
+    String sql = "SELECT id, title, isbn, edition, description FROM book where id = ?";
+    Book book = null;
 
     try(
       Connection connection = ConfigDB.getConnection();
@@ -117,18 +113,18 @@ public class BookDao {
       ResultSet results = statement.executeQuery();
 
       if (results.next()) {
-        livro = fillBook(results);
+        book = fillBook(results);
       }
     } catch (SQLException e) {
       e.printStackTrace();
     }
 
-    return livro;
+    return book;
   }
 
   public List<Book> getByTitle(String title) {
-    String sql = "SELECT id, titulo, isbn, edicao, descricao FROM livro where lower(titulo) like ?";
-    List<Book> livros = null;
+    String sql = "SELECT id, title, isbn, edition, description FROM book where lower(title) like ?";
+    List<Book> books = null;
 
     try(
       Connection connection = ConfigDB.getConnection();
@@ -138,27 +134,27 @@ public class BookDao {
       statement.setString(1, "%" + lowerCasedTitle + "%");
 
       ResultSet results = statement.executeQuery();
-      livros = new ArrayList<Book>();
-      Book livro;
+      books = new ArrayList<Book>();
+      Book book;
 
       while (results.next()) {
-        livro = fillBook(results);
+        book = fillBook(results);
       
-        livros.add(livro);        
+        books.add(book);        
       }
     } catch (SQLException e) {
       e.printStackTrace();
     }
 
-    return livros;
+    return books;
   }
 
   public void update(Book updatedBook) {
     String sql = """
-                    UPDATE livro SET titulo = ?,
+                    UPDATE book SET title = ?,
                                      isbn = ?,
-                                     edicao = ?,
-                                     descricao = ?
+                                     edition = ?,
+                                     description = ?
                     WHERE id = ? 
                     """;
 
@@ -181,7 +177,7 @@ public class BookDao {
   }
 
   public void delete(Long id) {
-    String sql = "DELETE FROM livro where id = ?";
+    String sql = "DELETE FROM book where id = ?";
 
     try(
       Connection connection = ConfigDB.getConnection();
@@ -197,26 +193,26 @@ public class BookDao {
     }
   }
 
-  private void prepareParameters(PreparedStatement stm, Book livro) throws SQLException {
-    stm.setString(1, livro.getTitle());
-    stm.setString(2, livro.getIsbn());
-    stm.setInt(3, livro.getEdition());
-    stm.setString(4, livro.getDescription());
+  private void prepareParameters(PreparedStatement stm, Book book) throws SQLException {
+    stm.setString(1, book.getTitle());
+    stm.setString(2, book.getIsbn());
+    stm.setInt(3, book.getEdition());
+    stm.setString(4, book.getDescription());
 
-    if (livro.getId() != null) {
-      stm.setLong(5, livro.getId());
+    if (book.getId() != null) {
+      stm.setLong(5, book.getId());
     }
   }
 
   private Book fillBook(ResultSet resultSet) throws SQLException {
-    Book livro = new Book();
+    Book book = new Book();
     
-    livro.setId(resultSet.getLong("id"));
-    livro.setTitle(resultSet.getString("titulo"));
-    livro.setIsbn(resultSet.getString("isbn"));
-    livro.setEdition(resultSet.getInt("edicao"));
-    livro.setDescription(resultSet.getString("descricao"));
+    book.setId(resultSet.getLong("id"));
+    book.setTitle(resultSet.getString("title"));
+    book.setIsbn(resultSet.getString("isbn"));
+    book.setEdition(resultSet.getInt("edition"));
+    book.setDescription(resultSet.getString("description"));
 
-    return livro;
+    return book;
   }
 }

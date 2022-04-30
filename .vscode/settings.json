@@ -3,6 +3,6 @@
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
         "/home/vitor/www/java/syslivros/lib/javafx-sdk-18/lib/**/*.jar",
-        "/home/vitor/www/java/syslivros/lib/jdbc/ojdbc11.jar"
+        "/home/vitor/www/java/syslivros/lib/jdbc/postgresql-42.3.4.jar"
     ]
 }

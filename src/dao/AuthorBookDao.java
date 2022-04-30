@@ -16,7 +16,7 @@ public class AuthorBookDao {
 
   public void insert(Book book) throws SQLException {
     String sql = """
-        INSERT INTO autor_livro(id_autor, id_livro) VALUES(?, ?)
+        INSERT INTO author_book(author_id, book_id) VALUES(?, ?)
         """;
     
     try(
@@ -38,7 +38,7 @@ public class AuthorBookDao {
 
   public void deleteAllByBookId(Long id) {
     String sql = """
-        DELETE FROM autor_livro WHERE id_livro = ?
+        DELETE FROM author_book WHERE book_id = ?
         """;
     
     try(

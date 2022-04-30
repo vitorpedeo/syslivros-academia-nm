@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  syslivros_db: 
+    image: postgres:14.2-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=syslivros
+      - POSTGRES_PASSWORD=syslivros
+      - POSTGRESQL_DATABASE=syslivros
+    ports:
+      - '5432:5432'
+    volumes:
+      - syslivros_db:/var/lib/postgresql/data
+
+volumes:
+  syslivros_db:
+    driver: local

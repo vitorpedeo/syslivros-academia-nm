@@ -14,22 +14,18 @@ import domain.Author;
 public class AuthorDao {
   public void insert(Author author) {
     String sql = """
-                    INSERT INTO autor(nome, nacionalidade, ano_nascimento) 
+                    INSERT INTO author(name, nationality, birth_year) 
                     VALUES(?, ?, ?)""";
-    String idSql = """
-                      SELECT autor_sequence.currval from dual
-                      """;
 
     try(
       Connection connection = ConfigDB.getConnection();
-      PreparedStatement statement = connection.prepareStatement(sql);
-      PreparedStatement idStatement = connection.prepareStatement(idSql);
+      PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
     ) {
       prepareParameters(statement, author);
       
       statement.executeUpdate();
 
-      ResultSet resultSet = idStatement.executeQuery();
+      ResultSet resultSet = statement.getGeneratedKeys();
       
       if (resultSet.next()) {
         author.setId(resultSet.getLong(1));
@@ -41,7 +37,7 @@ public class AuthorDao {
 
   public List<Author> getAll() {
     String sql = """
-                SELECT id, nome, nacionalidade, ano_nascimento FROM autor 
+                SELECT id, name, nationality, birth_year FROM author 
                 FETCH FIRST 5 ROWS ONLY""";
     List<Author> authors = null;
 
@@ -67,7 +63,7 @@ public class AuthorDao {
 
   public List<Author> getAll(Integer offset) {
     String sql = """
-                SELECT id, nome, nacionalidade, ano_nascimento FROM autor 
+                SELECT id, name, nationality, birth_year FROM author 
                 OFFSET ? ROWS FETCH FIRST 5 ROWS ONLY""";
     List<Author> authors = null;
 
@@ -94,8 +90,8 @@ public class AuthorDao {
   }
 
   public Author getById(Long id) {
-    String sql = "SELECT id, nome, nacionalidade, ano_nascimento FROM autor where id = ?";
-    Author livro = null;
+    String sql = "SELECT id, name, nationality, birth_year FROM author where id = ?";
+    Author author = null;
 
     try(
       Connection connection = ConfigDB.getConnection();
@@ -106,21 +102,21 @@ public class AuthorDao {
       ResultSet results = statement.executeQuery();
 
       if (results.next()) {
-        livro = fillAuthor(results);
+        author = fillAuthor(results);
       }
     } catch (SQLException e) {
       e.printStackTrace();
     }
 
-    return livro;
+    return author;
   }
 
   public List<Author> getAllByBookId(Long bookId) {
     String sql = """
-                    SELECT a.* FROM autor a
-                    INNER JOIN autor_livro al
-                    ON a.id = al.id_autor
-                    AND al.id_livro = ?""";
+                    SELECT a.* FROM author a
+                    INNER JOIN author_book al
+                    ON a.id = al.author_id
+                    AND al.book_id = ?""";
     List<Author> authors = null;
 
     try(
@@ -147,7 +143,7 @@ public class AuthorDao {
 
   public List<Author> getByName(String name) {
     String sql = """
-      SELECT id, nome, nacionalidade, ano_nascimento FROM autor where lower(nome) like ?
+      SELECT id, name, nationality, birth_year FROM author where lower(name) like ?
       """;
     List<Author> authors = null;
 
@@ -176,9 +172,9 @@ public class AuthorDao {
 
   public void update(Author updatedAuthor) {
     String sql = """
-                    UPDATE autor SET nome = ?,
-                                      nacionalidade = ?,
-                                      ano_nascimento = ?
+                    UPDATE author SET name = ?,
+                                      nationality = ?,
+                                      birth_year = ?
                     WHERE id = ? 
                     """;
 
@@ -197,7 +193,7 @@ public class AuthorDao {
   }
 
   public void delete(Long id) {
-    String sql = "DELETE FROM autor where id = ?";
+    String sql = "DELETE FROM author where id = ?";
 
     try(
       Connection connection = ConfigDB.getConnection();
@@ -231,9 +227,9 @@ public class AuthorDao {
     Author author = new Author();
     
     author.setId(resultSet.getLong("id"));
-    author.setName(resultSet.getString("nome"));
-    author.setNationality(resultSet.getString("nacionalidade"));
-    author.setBirthYear(resultSet.getLong("ano_nascimento"));
+    author.setName(resultSet.getString("name"));
+    author.setNationality(resultSet.getString("nationality"));
+    author.setBirthYear(resultSet.getLong("birth_year"));
 
     return author;
   }
